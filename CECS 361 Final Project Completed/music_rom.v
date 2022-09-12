@@ -22,7 +22,7 @@
 /* Music Notes: There are 12 different music notes. Each music note can be played at a certain freqeuncy and 
        have different octaves which change it to a higher or lower pitch
         
-        Notes in Fur Elise
+        Notes in Fur Elise(these are example octaves)
         
         E2 D#2 E2 D#2 E2   B1 D2 C2 A1   C1 E1 A1 B1   E1 A1 B1 C2
         E2 D#2 E2 D#2 E2   B1 D2 C2 A1   C1 E1 A1 B1   E1 C2 B1 A1
@@ -34,26 +34,28 @@ module music_ROM(
 	input clk,
 	input rst,
 	input [7:0] address, //uses 8 bits of our tone counter to determine location of address
-	output reg [7:0] note //value of note is sent to divide by 12 module to determine
+	output reg [31:0] note //value of note is sent to divide by 12 module to determine
 	                      //our octave and music note to play
 );
 //correspond to music notes being used for the song to be played
-// made into paramters so that we can easily change between octaves by simply adding or subtracting 12 
-parameter E4 = 8'd25;
-parameter Dsharp4 = 8'd24;
-parameter B3 = 8'd20;
-parameter D4 = 8'd23;
-parameter C4 = 8'd21;
-parameter A3 = 8'd18;
-parameter C3 = 8'd9;
-parameter E3 = 8'd13;
-parameter F4 = 8'd26;
+
+parameter F4 = 32'd143266/2;
+parameter E4 = 32'd151745/2;
+parameter Dsharp4 = 32'd160771/2;
+parameter D4 = 32'd168350/2;
+parameter C4 = 32'd190840/2;
+parameter A3 = 32'd227273/2;
+parameter B3 = 32'd202429/2;
+parameter C3 = 32'd381679/2;
+parameter E3 = 32'd303030/2;
+
 
 always @(posedge clk or posedge rst) //song being played based on notes. There a short pause at the end
      if (rst)
-        note <= 8'b0;
+        note <= 32'b0;
      else                //and song starts playing again. 39 seconds to play
 case(address)            
+	 
 	  0: note<= E4; 
 	  1: note<= Dsharp4;
 	  2: note<= E4;  
@@ -286,7 +288,7 @@ case(address)
     229: note<= B3;
     230: note<= B3;
     231: note<= B3;
-	default: note <= 8'd0;
+	default: note <= 32'd0;
 endcase
 
 
